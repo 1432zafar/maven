@@ -1,0 +1,18 @@
+node {
+	def mvnHome = tool name: 'Maven home', type: 'maven'
+	stage('SCM-Checkout') {
+		git branch: 'main', credentialsId: 'Git-cred', url: 'https://github.com/zafar143/jentest.git'
+	}
+	stage('Maven clean-compile') {
+		sh '${mvnHome}/bin/mvn clean compile'
+	}
+	stage('Maven package') {
+		sh '${mvnHome}/bin/mvn clean package'
+	}
+	stage('Tomcat Deployment') {
+		sshagent(['Tomcat-key']) {
+			sh "ssh -o StrictHostKeyChecking=no /target/*.war ec2-user@172.31.37.31 /opt/apache-tomcat/webapps"
+		}
+	}
+
+}
