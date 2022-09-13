@@ -14,5 +14,4 @@ node {
 			sh "ssh -o StrictHostKeyChecking=no /target/*.war ec2-user@172.31.37.31 /opt/apache-tomcat/webapps"
 		}
 	}
-
 }
